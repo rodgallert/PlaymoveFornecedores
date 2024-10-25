@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Suppliers.Data\Suppliers.Data.csproj" />
     <ProjectReference Include="..\Suppliers.Domain\Suppliers.Domain.csproj" />
+    <ProjectReference Include="..\Suppliers.Services\Suppliers.Services.csproj" />
   </ItemGroup>
 
 </Project>

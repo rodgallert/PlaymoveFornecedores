@@ -3,13 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Suppliers.Data.Repositories;
-using Suppliers.Domain.Interfaces.Repositories;
 
 namespace Suppliers.Data;
 public static class ServiceManager
 {
-    public static void ConfigureDataInjection(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
+    public static void InjectData(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         string connectionString = configuration.GetConnectionString("DefaultConnection");
 
