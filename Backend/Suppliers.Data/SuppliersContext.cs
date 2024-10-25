@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Suppliers.Domain.Entities;
 
 namespace Suppliers.Data;
-public class SuppliersContext
+public partial class SuppliersContext(DbContextOptions opt) : DbContext(opt)
 {
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
+
+    public DbSet<Supplier> Suppliers { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
 }
