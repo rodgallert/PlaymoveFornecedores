@@ -8,5 +8,6 @@ public static class ServiceManager
     public static void InjectServices(this IServiceCollection services)
     {
         services.AddScoped<ISupplierService, SupplierService>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

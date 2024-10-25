@@ -5,7 +5,7 @@ public class Supplier : BaseEntity
     public string Address { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
-    public string SocialNumber { get; set; }
+    public string TaxIdentificationNumber { get; set; }
 
     public virtual ICollection<Contact> Contacts { get; set; }
 }

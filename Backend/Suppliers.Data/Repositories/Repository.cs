@@ -35,11 +35,13 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
                 .FindAsync(id);
     }
 
-    public async Task<ICollection<T>> GetAsync()
+    public async Task<ICollection<T>> GetAsync(int skip, int take)
     {
         return await _context
             .Set<T>()
             .Where(x => x.IsActive)
+            .Skip(skip)
+            .Take(take)
             .ToListAsync();
     }
 

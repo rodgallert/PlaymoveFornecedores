@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Suppliers.Data.Repositories;
+using Suppliers.Domain.Interfaces.Repositories;
 
 namespace Suppliers.Data;
 public static class ServiceManager
@@ -34,6 +36,6 @@ public static class ServiceManager
 
     private static void ConfigureRepositories(this IServiceCollection services)
     {
-        
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
     }
 }
