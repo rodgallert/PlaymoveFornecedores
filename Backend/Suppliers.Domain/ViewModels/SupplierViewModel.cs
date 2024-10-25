@@ -11,5 +11,5 @@ public class SupplierViewModel
     public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; } = true;
 
-    public ICollection<ContactViewModel> Contacts { get; set; }
+    public ICollection<ContactViewModel>? Contacts { get; set; }
 }
