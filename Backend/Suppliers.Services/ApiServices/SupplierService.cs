@@ -18,6 +18,9 @@ public class SupplierService : ISupplierService
 
     public async Task<SupplierViewModel> AddAsync(SupplierViewModel supplier)
     {
+        if (await _supplierRepository.IsTaxIdentificationNumberRegisteredAsync(supplier.TaxIdentificationNumber))
+            throw new ArgumentException("Tax identification number is already registered");
+
         var supplierDto = _mapper.Map<Supplier>(supplier);
         supplierDto = await _supplierRepository.AddAsync(supplierDto);
 
@@ -40,18 +43,25 @@ public class SupplierService : ISupplierService
         return _mapper.Map<SupplierViewModel>(supplier);
     }
 
-    public async Task<ICollection<SupplierViewModel>> GetAsync(int page, int size)
+    public async Task<PaginatedList<SupplierViewModel>> GetAsync(int page = 1, int size = 10)
     {
-        if (page < 1)
-            page = 1;
-
-        if (size < 1)
-            size = 10;
-
         int skip = (page - 1) * size;
-        var suppliers = await _supplierRepository.GetAsync(skip, size);
+        var suppliers = await _supplierRepository.GetAsync();
 
-        return _mapper.Map<ICollection<SupplierViewModel>>(suppliers);
+        var viewModel = _mapper.Map<ICollection<SupplierViewModel>>(suppliers.Skip(skip).Take(size));
+
+        return new PaginatedList<SupplierViewModel>(suppliers.Count, viewModel);
+    }
+
+    public async Task<PaginatedList<SupplierViewModel>> SearchAsync(string query, CancellationToken ct, int page = 1, int size = 10)
+    {
+        int skip = (page - 1) * size;
+
+        var suppliers = await _supplierRepository.SearchSuppliersAsync(query, ct);
+        
+        var viewModel = _mapper.Map<ICollection<SupplierViewModel>>(suppliers.Skip(skip).Take(size));
+
+        return new PaginatedList<SupplierViewModel>(suppliers.Count, viewModel);
     }
 
     public async Task UpdateAsync(SupplierViewModel supplier, ulong id)
@@ -64,7 +74,11 @@ public class SupplierService : ISupplierService
         if (supplierDto == null)
             throw new ArgumentException("Supplier not found");
 
-        supplierDto = _mapper.Map<Supplier>(supplier);
+        supplierDto.Name = supplier.Name;
+        supplierDto.Address = supplier.Address;
+        supplierDto.Phone = supplier.Phone;
+        supplierDto.Email = supplier.Email;
+
         await _supplierRepository.UpdateAsync(supplierDto);
     }
 }

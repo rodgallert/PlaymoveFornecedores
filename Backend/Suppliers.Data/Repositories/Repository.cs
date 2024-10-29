@@ -32,16 +32,16 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         return await _context
                 .Set<T>()
-                .FindAsync(id);
+                .FirstOrDefaultAsync(x => x.IsActive
+                    && x.Id == id);
     }
 
-    public async Task<ICollection<T>> GetAsync(int skip, int take)
+    public async Task<ICollection<T>> GetAsync()
     {
         return await _context
             .Set<T>()
             .Where(x => x.IsActive)
-            .Skip(skip)
-            .Take(take)
+            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -51,5 +51,6 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         var obj = _context
             .Set<T>()
             .Update(entity);
+        await _context.SaveChangesAsync();
     }
 }

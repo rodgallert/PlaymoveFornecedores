@@ -18,6 +18,17 @@ public class ErrorHandlingMiddleware
         {
             await _next(context);
         }
+        catch (ArgumentException ex)
+        {
+            var response = context.Response;
+
+            response.ContentType = "application/json";
+            response.StatusCode = StatusCodes.Status400BadRequest;
+
+            var result = JsonSerializer.Serialize(new { error = ex.Message });
+
+            await response.WriteAsync(result);
+        }
         catch (BadRequestException ex)
         {
             var response = context.Response;
